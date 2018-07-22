@@ -5,6 +5,11 @@ import App from './App'
 import router from './router'
 import 'common/stylus/index.styl'
 import fastclick from 'fastclick'
+import VueLazyload from 'vue-lazyload'
+
+Vue.use(VueLazyload, {
+	loading: require('common/images/default.png')
+})
 
 fastclick.attach(document.body)
 
