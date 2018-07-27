@@ -4,6 +4,7 @@ import AppRecommend from 'components/Recommend/Recommend'
 import AppRank from 'components/Rank/Rank'
 import AppSearch from 'components/Search/Search'
 import AppSinger from 'components/Singer/Singer'
+import AppSingerDetail from 'components/SingerDetail/SingerDetail'
 
 Vue.use(Router)
 
@@ -27,7 +28,13 @@ export default new Router({
 		},
 		{
 			path: '/singer',
-			component: AppSinger
+			component: AppSinger,
+			children: [
+				{
+					path: ':id',
+					component: AppSingerDetail
+				}
+			]
 		}
 	]
 })
