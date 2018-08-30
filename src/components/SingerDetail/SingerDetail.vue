@@ -1,12 +1,12 @@
 <template>
   <transition name="slide">
-    <app-music-list v-if="singer" :title="title" :bg-image="bgImage" :songs="songs"></app-music-list>
+    <app-music-list ref="list" v-if="singer" :title="title" :bg-image="bgImage" :songs="songs"></app-music-list>
   </transition>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import { GETTERS_TYPES as SINGER_GETTERS_TYPES } from '@/store/singer/getters'
+import { GETTER_TYPES as SINGER_GETTER_TYPES } from '@/store/singer/getters'
 import { CODE_OK } from 'api/config'
 import { getSingerDetail } from 'api/singer'
 import { createSong } from 'common/js/song'
@@ -22,7 +22,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ ...SINGER_GETTERS_TYPES }),
+    ...mapGetters({ ...SINGER_GETTER_TYPES }),
     title() {
       return this.singer.name
     },

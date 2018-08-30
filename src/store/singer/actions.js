@@ -1,11 +1,11 @@
-import { MUTATIONS_TYPES } from './mutations'
+import { MUTATION_TYPES } from './mutations'
 
-export const ACTIONS_TYPES = {
+export const ACTION_TYPES = {
 	setSinger: 'setSinger'
 }
 
 export default {
-	[ACTIONS_TYPES.setSinger](context, payload) {
-		context.commit(MUTATIONS_TYPES.setSinger, payload)
+	[ACTION_TYPES.setSinger](context, payload) {
+		context.commit(MUTATION_TYPES.setSinger, payload)
 	}
 }

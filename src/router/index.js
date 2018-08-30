@@ -5,6 +5,8 @@ import AppRank from 'components/Rank/Rank'
 import AppSearch from 'components/Search/Search'
 import AppSinger from 'components/Singer/Singer'
 import AppSingerDetail from 'components/SingerDetail/SingerDetail'
+import AppDisc from 'components/Disc/Disc'
+import AppTopList from 'components/TopList/TopList'
 
 Vue.use(Router)
 
@@ -16,11 +18,23 @@ export default new Router({
 		},
 		{
 			path: '/recommend',
-			component: AppRecommend
+			component: AppRecommend,
+			children: [
+				{
+					path: ':id',
+					component: AppDisc
+				}
+			]
 		},
 		{
 			path: '/rank',
-			component: AppRank
+			component: AppRank,
+			children: [
+				{
+					path: ':id',
+					component: AppTopList
+				}
+			]
 		},
 		{
 			path: '/search',

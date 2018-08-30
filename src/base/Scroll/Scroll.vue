@@ -24,15 +24,25 @@ export default {
     data: {
       type: Array,
       default: null
+    },
+    pullToRefresh: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      scroll: {}
+      scroll: undefined,
+      refreshDelay: {
+        type: Number,
+        default: 20
+      }
     }
   },
   mounted() {
-    this._initScroll()
+    setTimeout(() => {
+      this._initScroll()
+    }, 20)
   },
   methods: {
     _initScroll() {
@@ -51,17 +61,31 @@ export default {
           that.$emit('scroll', pos)
         })
       }
+
+      if (this.pullToRefresh) {
+        this.scroll.on('scrollEnd', () => {
+          if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+            this.$emit('scrollToEnd')
+          }
+        })
+      }
+
     },
     scrollTo() {
       this.scroll && this.scroll.scrollTo.apply(this.scroll, arguments)
     },
     scrollToElement() {
       this.scroll && this.scroll.scrollToElement.apply(this.scroll, arguments)
+    },
+    refresh() {
+      this.scroll && this.scroll.refresh()
     }
   },
   watch: {
     data() {
-      this.scroll.refresh()
+      setTimeout(() => {
+        this.refresh()
+      }, this.refreshDelay)
     }
   }
 }

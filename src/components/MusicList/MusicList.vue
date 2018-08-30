@@ -6,7 +6,7 @@
     <h1 class="title" v-html="title"></h1>
     <div class="bg-image" :style="bgStyle" ref="bgImage">
       <div class="play-wrapper">
-        <div ref="playBtn" v-show="songs.length > 0" class="play">
+        <div ref="playBtn" v-show="songs.length > 0" class="play" @click="random">
           <i class="icon-play"></i>
           <span class="text">随机播放全部</span>
         </div>
@@ -16,7 +16,7 @@
     <div class="bg-layer" ref="layer"></div>
     <app-scroll @scroll="scroll" :data="songs" :listen-scroll="listenScroll" :probe-type="probeType" class="list" ref="list">
       <div class="song-list-wrapper">
-        <app-song-list :songs="songs"></app-song-list>
+        <app-song-list :songs="songs" @select="selectItem" :rank="rank"></app-song-list>
       </div>
       <div v-show="!songs.length" class="loading-container">
         <app-loading></app-loading>
@@ -29,12 +29,16 @@
 import AppLoading from 'base/Loading/Loading'
 import AppSongList from 'base/SongList/SongList'
 import AppScroll from 'base/Scroll/Scroll'
-import { mapActions } from 'vuex'
-import { ACTIONS_TYPES as SINGER_ACTIONS_TYPES } from '@/store/singer/actions'
+import { mapActions, mapGetters } from 'vuex'
+import { ACTION_TYPES as SINGER_ACTION_TYPES } from '@/store/singer/actions'
+import { ACTION_TYPES as PLAYER_ACTION_TYPES } from '@/store/player/actions'
+import { GETTER_TYPES as PLAYER_GETTER_TYPES } from '@/store/player/getters'
+import { playlistMixin } from 'common/js/mixin'
 
 const RESERVED_HEIGHT = 40
 
 export default {
+  mixins: [playlistMixin],
   props: {
     bgImage: {
       type: String,
@@ -42,7 +46,7 @@ export default {
     },
     songs: {
       type: Array,
-      default: []
+      default: () => []
     },
     title: {
       type: String,
@@ -66,18 +70,36 @@ export default {
     this.$refs.list.$el.style.top = `${this.imageHeight}px`
   },
   computed: {
+    ...mapGetters({ ...PLAYER_GETTER_TYPES }),
     bgStyle() {
       return `background-image:url(${this.bgImage})`
     }
   },
   methods: {
-    ...mapActions({ ...SINGER_ACTIONS_TYPES }),
+    ...mapActions({ ...SINGER_ACTION_TYPES }),
+    ...mapActions({ ...PLAYER_ACTION_TYPES }),
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.list.$el.style.bottom = bottom
+      this.$refs.list.refresh()
+    },
     scroll(pos) {
       this.scrollY = pos.y
     },
     back() {
       this.$router.back()
-    }
+    },
+    selectItem(item, index) {
+      this.selectPlay({
+        list: this.songs,
+        index
+      })
+    },
+    random() {
+      this.randomPlay({
+        list: this.songs
+      })
+    },
   },
   watch: {
     scrollY(value) {

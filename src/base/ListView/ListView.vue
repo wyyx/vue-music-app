@@ -105,6 +105,9 @@ export default {
         height += groupRef.clientHeight
         this.groupHeightList.push(height)
       }
+    },
+    refresh() {
+      this.$refs.listview.refresh()
     }
   },
   watch: {

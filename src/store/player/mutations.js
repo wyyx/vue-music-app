@@ -1,29 +1,29 @@
-export const MUTATIONS_TYPES = {
-	setPlaying: 'setPlaying',
+export const MUTATION_TYPES = {
+	setPlayingState: 'setPlayingState',
 	setFullScreen: 'setFullScreen',
 	setPlaylist: 'setPlaylist',
 	setSequenceList: 'setSequenceList',
-	setMode: 'setMode',
+	setPlayMode: 'setPlayMode',
 	setCurrentIndex: 'setCurrentIndex'
 }
 
 export default {
-	[MUTATIONS_TYPES.setPlaying](state, payload) {
-		state.playing = payload
+	[MUTATION_TYPES.setPlayingState](state, payload) {
+		state.playingState = payload
 	},
-	[MUTATIONS_TYPES.setFullScreen](state, payload) {
-		state.setFullScreen = payload
+	[MUTATION_TYPES.setFullScreen](state, payload) {
+		state.fullScreen = payload
 	},
-	[MUTATIONS_TYPES.setPlaylist](state, payload) {
-		state.setPlaylist = payload
+	[MUTATION_TYPES.setPlaylist](state, payload) {
+		state.playlist = payload
 	},
-	[MUTATIONS_TYPES.setSequenceList](state, payload) {
-		state.setSequenceList = payload
+	[MUTATION_TYPES.setSequenceList](state, payload) {
+		state.sequenceList = payload
 	},
-	[MUTATIONS_TYPES.setMode](state, payload) {
-		state.mode = payload
+	[MUTATION_TYPES.setPlayMode](state, payload) {
+		state.playMode = payload
 	},
-	[MUTATIONS_TYPES.setCurrentIndex](state, payload) {
+	[MUTATION_TYPES.setCurrentIndex](state, payload) {
 		state.currentIndex = payload
 	}
 }

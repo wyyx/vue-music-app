@@ -1,9 +1,9 @@
-export const MUTATIONS_TYPES = {
+export const MUTATION_TYPES = {
 	setSinger: 'setSinger'
 }
 
 export default {
-	[MUTATIONS_TYPES.setSinger](state, payload) {
+	[MUTATION_TYPES.setSinger](state, payload) {
 		state.singer = payload
 	}
 }

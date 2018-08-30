@@ -1,33 +1,33 @@
-export const GETTERS_TYPES = {
-	playing: 'playing',
+export const GETTER_TYPES = {
+	playingState: 'playingState',
 	fullScreen: 'fullScreen',
 	playlist: 'playlist',
 	sequenceList: 'sequenceList',
-	mode: 'mode',
+	playMode: 'playMode',
 	currentIndex: 'currentIndex',
 	currentSong: 'currentSong'
 }
 
 export default {
-	[GETTERS_TYPES.playing](state) {
-		return state.singer
+	[GETTER_TYPES.playingState](state) {
+		return state.playingState
 	},
-	[GETTERS_TYPES.fullScreen](state) {
-		return state.singer
+	[GETTER_TYPES.fullScreen](state) {
+		return state.fullScreen
 	},
-	[GETTERS_TYPES.playlist](state) {
-		return state.singer
+	[GETTER_TYPES.playlist](state) {
+		return state.playlist
 	},
-	[GETTERS_TYPES.sequenceList](state) {
-		return state.singer
+	[GETTER_TYPES.sequenceList](state) {
+		return state.sequenceList
 	},
-	[GETTERS_TYPES.mode](state) {
-		return state.singer
+	[GETTER_TYPES.playMode](state) {
+		return state.playMode
 	},
-	[GETTERS_TYPES.currentIndex](state) {
-		return state.singer
+	[GETTER_TYPES.currentIndex](state) {
+		return state.currentIndex
 	},
-	[GETTERS_TYPES.currentSong](state) {
+	[GETTER_TYPES.currentSong](state) {
 		return state.playlist[state.currentIndex]
 	}
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="recommend">
+  <div class="recommend" ref="recommend">
     <app-scroll ref="scroll" :data="discList" class="recommend-content">
       <div>
         <div class="slider-wrapper" v-if="recommends.length > 0">
@@ -14,7 +14,7 @@
         <div class="recommend-list">
           <h1 class="list-title">热门歌单推荐</h1>
           <ul>
-            <li v-for="item in discList" class="item">
+            <li v-for="item in discList" class="item" @click="selectItem(item)">
               <div class="icon">
                 <img width="60" height="60" v-lazy="item.imgurl">
               </div>
@@ -30,6 +30,7 @@
         <app-loading></app-loading>
       </div>
     </app-scroll>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -37,10 +38,15 @@
 import AppSlider from 'base/Slider/Slider'
 import AppScroll from 'base/Scroll/Scroll'
 import AppLoading from 'base/Loading/Loading'
-import { getRecommends, getDiscList } from 'api/recommend.service'
+import { getRecommends, getDiscList } from 'api/recommend'
 import { CODE_OK } from 'api/config'
+import { playlistMixin } from 'common/js/mixin'
+import { mapMutations } from 'vuex'
+import { ACTION_TYPES as COMMON_ACTION_TYPES } from '@/store/common/actions';
+
 
 export default {
+  mixins: [playlistMixin],
   data() {
     return {
       recommends: [],
@@ -58,6 +64,19 @@ export default {
     AppLoading
   },
   methods: {
+    ...mapMutations({ ...COMMON_ACTION_TYPES }),
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.recommend.style.bottom = bottom
+      this.$refs.scroll.refresh()
+    },
+    selectItem(item) {
+      // console.log('item', item)
+      this.setDisc(item)
+      this.$router.push({
+        path: `/recommend/${item.dissid}`
+      })
+    },
     _getRecommends() {
       getRecommends().then((res) => {
         if (res.code === CODE_OK) {

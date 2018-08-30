@@ -1,6 +1,6 @@
 <template>
   <div class="singer" ref="singer">
-    <app-list-view :data="singers" @select="onSelectSinger"></app-list-view>
+    <app-list-view :data="singers" @select="onSelectSinger" ref="list"></app-list-view>
     <router-view></router-view>
   </div>
 </template>
@@ -10,14 +10,16 @@ import { getSingerList } from 'api/singer'
 import { CODE_OK } from 'api/config'
 import Singer from 'common/js/singer'
 import AppListView from 'base/ListView/ListView'
-import { mapActions } from 'vuex'
-import { ACTIONS_TYPES as SINGER_ACTIONS_TYPES } from '@/store/singer/actions'
+import { mapActions, mapGetters } from 'vuex'
+import { ACTION_TYPES as SINGER_ACTION_TYPES } from '@/store/singer/actions'
+import { playlistMixin } from 'common/js/mixin'
 
 
 const HOT_SINGER_LEN = 10
 const HOT_NAME = '热门'
 
 export default {
+  mixins: [playlistMixin],
   components: {
     AppListView
   },
@@ -26,11 +28,20 @@ export default {
       singers: []
     }
   },
+  computed: {
+    ...mapGetters(['playlist'])
+
+  },
   created() {
     this._getSingerList()
   },
   methods: {
-    ...mapActions({ ...SINGER_ACTIONS_TYPES }),
+    ...mapActions({ ...SINGER_ACTION_TYPES }),
+    handlePlaylist(playlist) {
+      const bottom = playlist.length > 0 ? '60px' : ''
+      this.$refs.singer.style.bottom = bottom
+      this.$refs.list.refresh()
+    },
     onSelectSinger(singer) {
       // console.log('singer', singer)
       this.$router.push({

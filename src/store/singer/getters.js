@@ -1,9 +1,9 @@
-export const GETTERS_TYPES = {
+export const GETTER_TYPES = {
 	singer: 'singer'
 }
 
 export default {
-	[GETTERS_TYPES.singer](state) {
+	[GETTER_TYPES.singer](state) {
 		return state.singer
 	}
 }
