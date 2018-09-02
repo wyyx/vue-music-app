@@ -10,7 +10,9 @@ export const ACTION_TYPES = {
 	setPlayMode: 'setPlayMode',
 	setCurrentIndex: 'setCurrentIndex',
 	selectPlay: 'selectPlay',
-	randomPlay: 'randomPlay'
+	randomPlay: 'randomPlay',
+	deleteFromPlaylist: 'deleteOneFromPlaylist',
+	deleteAllFromPlaylist: 'deleteAllFromPlaylist'
 }
 
 export default {
@@ -60,6 +62,33 @@ export default {
 		commit(MUTATION_TYPES.setSequenceList, list)
 		commit(MUTATION_TYPES.setCurrentIndex, 0)
 		commit(MUTATION_TYPES.setFullScreen, true)
+	},
+	[ACTION_TYPES.deleteFromPlaylist]({ commit, state }, song) {
+		let playlist = state.playlist.slice()
+		let sequenceList = state.sequenceList.slice()
+		let currentIndex = state.currentIndex
+
+		let pIndex = playlist.findIndex(s => s.id === song.id)
+		playlist.splice(pIndex, 1)
+
+		let sIndex = sequenceList.findIndex(s => s.id === song.id)
+		sequenceList.splice(sIndex, 1)
+
+		if (
+			currentIndex > pIndex ||
+			(currentIndex === pIndex && currentIndex === playlist.length)
+		) {
+			currentIndex--
+		}
+
+		commit(MUTATION_TYPES.setCurrentIndex, currentIndex)
+		commit(MUTATION_TYPES.setPlaylist, playlist)
+		commit(MUTATION_TYPES.setSequenceList, sequenceList)
+	},
+	[ACTION_TYPES.deleteAllFromPlaylist]({ commit, state }) {
+		commit(MUTATION_TYPES.setCurrentIndex, -1)
+		commit(MUTATION_TYPES.setPlaylist, [])
+		commit(MUTATION_TYPES.setSequenceList, [])
 	}
 }
 

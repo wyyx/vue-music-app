@@ -83,11 +83,12 @@
             <i class="icon-mini" :class="miniIcon" @click.stop="togglePlaying"></i>
           </app-progress-circle>
         </div>
-        <div class="control">
+        <div class="control" @click.stop="showPlaylist">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
+    <app-playlist ref="playlist"></app-playlist>
     <audio ref="audio" :src="currentSong.url" @play="ready" @error="error" @ended="onEnded"></audio>
   </div>
 </template>
@@ -99,6 +100,7 @@ import { ACTION_TYPES as PLAYER_ACTION_TYPES } from '@/store/player/actions'
 import AppScroll from 'base/Scroll/Scroll'
 import AppProgressBar from 'base/ProgressBar/ProgressBar'
 import AppProgressCircle from 'base/ProgressCircle/ProgressCircle'
+import AppPlaylist from '@/components/Playlist/Playlist'
 import animations from 'create-keyframe-animation'
 import { playMode } from 'common/js/config'
 import { shuffle } from 'common/js/util'
@@ -106,6 +108,8 @@ import Lyric from 'lyric-parser'
 
 
 export default {
+  name: 'player',
+
   data() {
     return {
       songReady: false,
@@ -147,8 +151,17 @@ export default {
 
 
   },
+  components: {
+    AppScroll,
+    AppProgressBar,
+    AppProgressCircle,
+    AppPlaylist
+  },
   methods: {
     ...mapActions({ ...PLAYER_ACTION_TYPES }),
+    showPlaylist() {
+      this.$refs.playlist.show()
+    },
     back() {
       this.setFullScreen(false)
     },
@@ -354,6 +367,10 @@ export default {
       })
     },
     handleLyric({ lineNum, txt }) {
+      if (!this.currentSong) {
+        return
+      }
+
       this.currentLineNum = lineNum
 
       if (lineNum > 5) {
@@ -468,7 +485,11 @@ export default {
     }
   },
   watch: {
-    currentSong() {
+    currentSong(newSong) {
+      if (!newSong) {
+        return
+      }
+
       this.$nextTick(() => {
         this.$refs.audio.play()
         this.getLyric()
@@ -486,12 +507,8 @@ export default {
         newState ? this.$refs.audio.play() : this.$refs.audio.pause()
       })
     }
-  },
-  components: {
-    AppScroll,
-    AppProgressBar,
-    AppProgressCircle
   }
+
 }
 </script>
 
