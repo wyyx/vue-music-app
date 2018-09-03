@@ -49,9 +49,7 @@
           </div>
           <!-- operator -->
           <div class="operators">
-            <div class="icon i-left" @click="changeMode">
-              <i :class="iconMode"></i>
-            </div>
+            <app-play-mode :size="30" class="icon i-left"></app-play-mode>
             <div class="icon i-left" :class="disableClass">
               <i class="icon-prev" @click="playPrevious"></i>
             </div>
@@ -99,6 +97,7 @@ import { GETTER_TYPES as PLAYER_GETTER_TYPES } from '@/store/player/getters'
 import { ACTION_TYPES as PLAYER_ACTION_TYPES } from '@/store/player/actions'
 import AppScroll from 'base/Scroll/Scroll'
 import AppProgressBar from 'base/ProgressBar/ProgressBar'
+import AppPlayMode from '@/base/PlayMode/PlayMode'
 import AppProgressCircle from 'base/ProgressCircle/ProgressCircle'
 import AppPlaylist from '@/components/Playlist/Playlist'
 import animations from 'create-keyframe-animation'
@@ -109,7 +108,6 @@ import Lyric from 'lyric-parser'
 
 export default {
   name: 'player',
-
   data() {
     return {
       songReady: false,
@@ -138,13 +136,6 @@ export default {
     },
     percent() {
       return this.currentTime / this.currentSong.duration
-    },
-    iconMode() {
-      for (const key in playMode) {
-        if (this.playMode === playMode[key]) {
-          return 'icon-' + key
-        }
-      }
     }
   },
   created() {
@@ -155,7 +146,8 @@ export default {
     AppScroll,
     AppProgressBar,
     AppProgressCircle,
-    AppPlaylist
+    AppPlaylist,
+    AppPlayMode
   },
   methods: {
     ...mapActions({ ...PLAYER_ACTION_TYPES }),
@@ -312,22 +304,6 @@ export default {
     disableClass() {
       return this.songReady ? '' : 'disable'
     },
-    changeMode() {
-      const mode = (this.playMode + 1) % 3
-      this.setPlayMode(mode)
-
-      let currentSongId = this.currentSong.id
-      if (mode === playMode.random) {
-        this.setPlaylist(shuffle(this.playlist))
-      }
-
-      this.resetCurrentIndex(currentSongId)
-    },
-    resetCurrentIndex(id) {
-      let newIndex = this.playlist.findIndex(item => item.id === id)
-      this.setCurrentIndex(newIndex)
-    },
-
     getPositionAndScale() {
       const startWidth = 40
       const startPaddingLeft = 20

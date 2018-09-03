@@ -28,8 +28,12 @@ export default {
 	[ACTION_TYPES.setSequenceList]({ commit }, payload) {
 		commit(MUTATION_TYPES.setSequenceList, payload)
 	},
-	[ACTION_TYPES.setPlayMode]({ commit }, payload) {
+	[ACTION_TYPES.setPlayMode]({ commit, state }, payload) {
 		commit(MUTATION_TYPES.setPlayMode, payload)
+
+		if (payload === playMode.sequence) {
+			commit(MUTATION_TYPES.setPlaylist, state.sequenceList)
+		}
 	},
 	[ACTION_TYPES.setCurrentIndex]({ commit }, payload) {
 		commit(MUTATION_TYPES.setCurrentIndex, payload)

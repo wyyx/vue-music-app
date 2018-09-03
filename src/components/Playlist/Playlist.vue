@@ -4,8 +4,8 @@
       <div class="list-wrapper" @click.stop>
         <div class="list-header">
           <h1 class="title">
-            <i class="icon"></i>
-            <span class="text"></span>
+            <app-play-mode class="icon" :size="30"></app-play-mode>
+            <span class="text">{{modeText}}</span>
             <span class="clear" @click="showConfirm">
               <i class="icon-clear"></i>
             </span>
@@ -28,7 +28,7 @@
         <div class="list-operate">
           <div class="add">
             <i class="icon-add"></i>
-            <span class="text">添加歌曲到队列</span>
+            <span class="text" @click="addSong">添加歌曲到队列</span>
           </div>
         </div>
         <div class="list-close" @click="hide">
@@ -36,6 +36,7 @@
         </div>
       </div>
       <app-confirm @confirm="clearPlaylist" ref="confirm" text="是否清空播放列表" confirmBtnText="清空"></app-confirm>
+      <app-add-song ref="addSong"></app-add-song>
     </div>
   </transition>
 </template>
@@ -44,6 +45,8 @@
 import { playMode } from 'common/js/config'
 import AppScroll from 'base/Scroll/Scroll'
 import AppConfirm from 'base/Confirm/Confirm'
+import AppPlayMode from '@/base/PlayMode/PlayMode'
+import AppAddSong from '@/components/AddSong/AddSong'
 import { GETTER_TYPES as PLAYER_GETTER_TYPES } from '@/store/player/getters'
 import { ACTION_TYPES as PLAYER_ACTION_TYPES } from '@/store/player/actions'
 import { mapGetters, mapActions } from 'vuex'
@@ -56,14 +59,19 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ ...PLAYER_GETTER_TYPES })
-
+    ...mapGetters({ ...PLAYER_GETTER_TYPES }),
+    modeText() {
+      return this.playMode === playMode.sequence ? '顺序播放' : this.playMode === playMode.random ? '随机播放' : '单曲循环'
+    }
   },
   created() {
   },
   methods: {
 
     ...mapActions({ ...PLAYER_ACTION_TYPES }),
+    addSong() {
+      this.$refs.addSong.show()
+    },
     showConfirm() {
       this.$refs.confirm.show()
     },
@@ -107,7 +115,9 @@ export default {
   },
   components: {
     AppConfirm,
-    AppScroll
+    AppScroll,
+    AppPlayMode,
+    AppAddSong
   }
 }
 </script>
