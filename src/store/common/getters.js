@@ -2,7 +2,9 @@ export const GETTER_TYPES = {
 	disc: 'disc',
 	topList: 'topList',
 	sampleList: 'sampleList',
-	searchHistory: 'searchHistory'
+	searchHistory: 'searchHistory',
+	playHistory: 'playHistory',
+	favoriteList: 'favoriteList'
 }
 
 export default {
@@ -17,5 +19,11 @@ export default {
 	},
 	[GETTER_TYPES.searchHistory](state) {
 		return state.searchHistory
+	},
+	[GETTER_TYPES.playHistory](state) {
+		return state.playHistory
+	},
+	[GETTER_TYPES.favoriteList](state) {
+		return state.favoriteList
 	}
 }

@@ -12,14 +12,14 @@ import Singer from 'common/js/singer'
 import AppListView from 'base/ListView/ListView'
 import { mapActions, mapGetters } from 'vuex'
 import { ACTION_TYPES as SINGER_ACTION_TYPES } from '@/store/singer/actions'
-import { playlistMixin } from 'common/js/mixin'
+import PlaylistMixin from '@/mixins/PlaylistMixin'
 
 
 const HOT_SINGER_LEN = 10
 const HOT_NAME = '热门'
 
 export default {
-  mixins: [playlistMixin],
+  mixins: [PlaylistMixin],
   components: {
     AppListView
   },

@@ -8,56 +8,99 @@
         </div>
       </div>
       <div class="search-box-wrapper">
-
+        <app-search-box ref="searchBox" @queryChange="onQueryChange" placeholder="搜索歌曲"></app-search-box>
       </div>
       <div class="shortcut" v-show="!query">
-
+        <app-multi-tab @tab="switchTab" :currentIndex="currentIndex" :tabs="tabs"></app-multi-tab>
+        <div class="list-wrapper">
+          <app-scroll ref="songList" v-if="currentIndex === 0" class="list-scroll" :data="playHistory">
+            <div class="list-inner">
+              <app-song-list :songs="playHistory" @select="selectItem">
+              </app-song-list>
+            </div>
+          </app-scroll>
+          <app-scroll ref="searchList" v-if="currentIndex===1" class="list-scroll" :data="searchHistory">
+            <div class="list-inner">
+              <app-search-list @delete="deleteHistory" @select="setQuery" :searches="searchHistory"></app-search-list>
+            </div>
+          </app-scroll>
+        </div>
       </div>
       <div class="search-result" v-show="query">
-
+        <app-suggest ref="suggest" :query="query" @select="onSelect"></app-suggest>
       </div>
     </div>
+
   </transition>
 </template>
 
-<script type="text/ecmascript-6">
-// import SearchBox from 'base/search-box/search-box'
-// import SongList from 'base/song-list/song-list'
-// import SearchList from 'base/search-list/search-list'
-// import Scroll from 'base/scroll/scroll'
-// import Switches from 'base/switches/switches'
-// import TopTip from 'base/top-tip/top-tip'
-// import Suggest from 'components/suggest/suggest'
-// import {searchMixin} from 'common/js/mixin'
-// import {mapGetters, mapActions} from 'vuex'
-// import Song from 'common/js/song'
+<script >
+import AppSearchBox from '@/base/SearchBox/SearchBox'
+import AppSuggest from '@/components/Suggest/Suggest'
+import SearchMixin from '@/mixins/SearchMixin'
+import AppMultiTab from '@/base/MultiTab/MultiTab'
+import AppSongList from '@/base/SongList/SongList'
+import AppScroll from '@/base/Scroll/Scroll'
+import AppSearchList from '@/base/SearchList/SearchList'
+import { GETTER_TYPES as COMMON_GETTER_TYPES } from '@/store/common/getters'
+import { ACTION_TYPES as COMMON_ACTION_TYPES } from '@/store/player/actions'
+import { mapGetters, mapActions } from 'vuex'
+import Song from 'common/js/song'
 
 export default {
+  mixins: [SearchMixin],
   data() {
     return {
       showFlag: false,
-      query: ''
-
+      query: '',
+      tabs: [
+        { title: '最近播放' },
+        { title: '搜索历史' }
+      ],
+      currentIndex: 0
     }
   },
   computed: {
-    // ...mapGetters([
-    //   'playHistory'
-    // ])
+    ...mapGetters([
+      'playHistory',
+      'searchHistory'
+    ])
+  },
+  created() {
+
   },
   methods: {
+    ...mapActions(['setPlayHistory', 'addToPlaylist']),
+    onSelect() {
+      this.hide()
+    },
+    selectItem(item) {
+      this.addToPlaylist(item)
+    },
+    switchTab(index) {
+      this.currentIndex = index
+    },
     show() {
       this.showFlag = true
+      setTimeout(() => {
+        if (this.currentIndex === 0) {
+          this.$refs.songList.refresh()
+        } else {
+          this.$refs.searchList.refresh()
+        }
+      }, 20)
     },
     hide() {
       this.showFlag = false
-    },
-
-    // ...mapActions([
-    //   'insertSong'
-    // ])
+    }
   },
   components: {
+    AppSearchBox,
+    AppSuggest,
+    AppMultiTab,
+    AppSongList,
+    AppScroll,
+    AppSearchList
   }
 }
 </script>

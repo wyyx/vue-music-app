@@ -80,13 +80,6 @@ export default {
     refresh() {
       this.scroll && this.scroll.refresh()
     }
-  },
-  watch: {
-    data() {
-      setTimeout(() => {
-        this.refresh()
-      }, this.refreshDelay)
-    }
   }
 }
 </script>

@@ -30,8 +30,12 @@ export default {
       this.setPlayMode(mode)
 
       let currentSongId = this.currentSong.id
+
       if (mode === playMode.random) {
-        this.setPlaylist(shuffle(this.playlist))
+        this.shufflePlaylist()
+      }
+      if (mode === playMode.sequence) {
+        this.setPlaylist(this.sequenceList)
       }
 
       this.resetCurrentIndex(currentSongId)

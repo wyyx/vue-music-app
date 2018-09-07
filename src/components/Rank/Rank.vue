@@ -27,13 +27,13 @@ import AppScroll from 'base/Scroll/Scroll'
 import AppLoading from 'base/Loading/Loading'
 import { getTopList } from 'api/rank'
 import { CODE_OK } from 'api/config'
-import { playlistMixin } from 'common/js/mixin'
+import PlaylistMixin from '@/mixins/PlaylistMixin'
 import { mapActions } from 'vuex'
 import { ACTION_TYPES as COMMON_ACTION_TYPES } from '@/store/common/actions'
 
 
 export default {
-  mixins: [playlistMixin],
+  mixins: [PlaylistMixin],
   created() {
     this._getTopList()
   },

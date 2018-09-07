@@ -33,12 +33,12 @@ import { mapActions, mapGetters } from 'vuex'
 import { ACTION_TYPES as SINGER_ACTION_TYPES } from '@/store/singer/actions'
 import { ACTION_TYPES as PLAYER_ACTION_TYPES } from '@/store/player/actions'
 import { GETTER_TYPES as PLAYER_GETTER_TYPES } from '@/store/player/getters'
-import { playlistMixin } from 'common/js/mixin'
+import PlaylistMixin from '@/mixins/PlaylistMixin'
 
 const RESERVED_HEIGHT = 40
 
 export default {
-  mixins: [playlistMixin],
+  mixins: [PlaylistMixin],
   props: {
     bgImage: {
       type: String,
@@ -96,9 +96,7 @@ export default {
       })
     },
     random() {
-      this.randomPlay({
-        list: this.songs
-      })
+      this.randomPlay(this.songs)
     },
   },
   watch: {

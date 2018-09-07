@@ -60,7 +60,7 @@
               <i class="icon-next" @click="playNext"></i>
             </div>
             <div class="icon i-right">
-              <i class="icon"></i>
+              <app-favorite :song="currentSong"></app-favorite>
             </div>
           </div>
         </div>
@@ -95,16 +95,17 @@
 import { mapGetters, mapActions } from 'vuex'
 import { GETTER_TYPES as PLAYER_GETTER_TYPES } from '@/store/player/getters'
 import { ACTION_TYPES as PLAYER_ACTION_TYPES } from '@/store/player/actions'
+import { ACTION_TYPES as COMMON_ACTION_TYPES } from '@/store/common/actions'
 import AppScroll from 'base/Scroll/Scroll'
 import AppProgressBar from 'base/ProgressBar/ProgressBar'
 import AppPlayMode from '@/base/PlayMode/PlayMode'
 import AppProgressCircle from 'base/ProgressCircle/ProgressCircle'
 import AppPlaylist from '@/components/Playlist/Playlist'
+import AppFavorite from 'base/Favorite/Favorite'
 import animations from 'create-keyframe-animation'
 import { playMode } from 'common/js/config'
 import { shuffle } from 'common/js/util'
 import Lyric from 'lyric-parser'
-
 
 export default {
   name: 'player',
@@ -126,6 +127,7 @@ export default {
       return this.playingState ? 'icon-pause' : 'icon-play'
     },
     disableCls() {
+      this.addPlayHistory(this.currentSong)
       return this.songReady ? '' : 'disable'
     },
     miniIcon() {
@@ -138,19 +140,20 @@ export default {
       return this.currentTime / this.currentSong.duration
     }
   },
-  created() {
-
-
-  },
   components: {
     AppScroll,
     AppProgressBar,
     AppProgressCircle,
     AppPlaylist,
-    AppPlayMode
+    AppPlayMode,
+    AppFavorite
   },
   methods: {
-    ...mapActions({ ...PLAYER_ACTION_TYPES }),
+    ...mapActions({ ...PLAYER_ACTION_TYPES, ...COMMON_ACTION_TYPES }),
+    ...mapActions([
+      'addFavorite',
+      'removeFavorite'
+    ]),
     showPlaylist() {
       this.$refs.playlist.show()
     },
@@ -465,6 +468,8 @@ export default {
       if (!newSong) {
         return
       }
+
+      this.addPlayHistory(newSong)
 
       this.$nextTick(() => {
         this.$refs.audio.play()

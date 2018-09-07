@@ -12,7 +12,7 @@ import { getSongList } from '@/api/recommend'
 import { CODE_OK } from '@/api/config'
 import { getSingerDetail } from 'api/singer'
 import { createSong } from 'common/js/song'
-import { playlistMixin } from '@/common/js/mixin'
+import PlaylistMixin from '@/mixins/PlaylistMixin'
 
 export default {
   computed: {

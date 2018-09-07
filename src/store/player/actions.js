@@ -11,8 +11,11 @@ export const ACTION_TYPES = {
 	setCurrentIndex: 'setCurrentIndex',
 	selectPlay: 'selectPlay',
 	randomPlay: 'randomPlay',
+	selectOnePlay: 'selectOnePlay',
 	deleteFromPlaylist: 'deleteOneFromPlaylist',
-	deleteAllFromPlaylist: 'deleteAllFromPlaylist'
+	deleteAllFromPlaylist: 'deleteAllFromPlaylist',
+	addToPlaylist: 'addToPlaylist',
+	shufflePlaylist: 'shufflePlaylist'
 }
 
 export default {
@@ -31,9 +34,9 @@ export default {
 	[ACTION_TYPES.setPlayMode]({ commit, state }, payload) {
 		commit(MUTATION_TYPES.setPlayMode, payload)
 
-		if (payload === playMode.sequence) {
-			commit(MUTATION_TYPES.setPlaylist, state.sequenceList)
-		}
+		// if (payload === playMode.sequence) {
+		// 	commit(MUTATION_TYPES.setPlaylist, state.sequenceList)
+		// }
 	},
 	[ACTION_TYPES.setCurrentIndex]({ commit }, payload) {
 		commit(MUTATION_TYPES.setCurrentIndex, payload)
@@ -56,15 +59,14 @@ export default {
 		commit(MUTATION_TYPES.setCurrentIndex, currentIndex)
 		commit(MUTATION_TYPES.setFullScreen, true)
 	},
-	[ACTION_TYPES.randomPlay]({ commit, state }, { list }) {
-		commit(MUTATION_TYPES.setPlayingState, true)
-		commit(MUTATION_TYPES.setPlayMode, playMode.random)
-
+	[ACTION_TYPES.randomPlay]({ commit, state }, list) {
 		let randomList = shuffle(list)
-		commit(MUTATION_TYPES.setPlaylist, randomList)
 
+		commit(MUTATION_TYPES.setPlaylist, randomList)
 		commit(MUTATION_TYPES.setSequenceList, list)
 		commit(MUTATION_TYPES.setCurrentIndex, 0)
+		commit(MUTATION_TYPES.setPlayingState, true)
+		commit(MUTATION_TYPES.setPlayMode, playMode.random)
 		commit(MUTATION_TYPES.setFullScreen, true)
 	},
 	[ACTION_TYPES.deleteFromPlaylist]({ commit, state }, song) {
@@ -89,10 +91,50 @@ export default {
 		commit(MUTATION_TYPES.setPlaylist, playlist)
 		commit(MUTATION_TYPES.setSequenceList, sequenceList)
 	},
+	[ACTION_TYPES.addToPlaylist]({ commit, state }, song) {
+		// if added just return
+		for (const s of state.sequenceList) {
+			if (s.id === song.id) {
+				return
+			}
+		}
+
+		let playlist = state.playlist.slice()
+		playlist.unshift(song)
+
+		let sequenceList = state.sequenceList.slice()
+		sequenceList.unshift(song)
+
+		commit(MUTATION_TYPES.setPlaylist, playlist)
+		commit(MUTATION_TYPES.setSequenceList, sequenceList)
+	},
 	[ACTION_TYPES.deleteAllFromPlaylist]({ commit, state }) {
 		commit(MUTATION_TYPES.setCurrentIndex, -1)
 		commit(MUTATION_TYPES.setPlaylist, [])
 		commit(MUTATION_TYPES.setSequenceList, [])
+	},
+	[ACTION_TYPES.shufflePlaylist]({ commit, state }) {
+		let playlist = shuffle(state.playlist)
+		commit(MUTATION_TYPES.setPlaylist, playlist)
+	},
+	[ACTION_TYPES.selectOnePlay]({ commit, state }, song) {
+		// if added just return
+		for (const s of state.sequenceList) {
+			if (s.id === song.id) {
+				return
+			}
+		}
+
+		let playlist = state.playlist.slice()
+		playlist.unshift(song)
+
+		let sequenceList = state.sequenceList.slice()
+		sequenceList.unshift(song)
+
+		commit(MUTATION_TYPES.setPlaylist, playlist)
+		commit(MUTATION_TYPES.setSequenceList, sequenceList)
+		commit(MUTATION_TYPES.setCurrentIndex, 0)
+		commit(MUTATION_TYPES.setPlayingState, true)
 	}
 }
 

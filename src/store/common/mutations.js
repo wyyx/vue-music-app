@@ -3,7 +3,9 @@ export const MUTATION_TYPES = {
 	setTopList: 'setTopList',
 	setSampleList: 'setSampleList',
 	setSearchHistory: 'setSearchHistory',
-	removeAllSearchHistory: 'removeAllSearchHistory'
+	removeAllSearchHistory: 'removeAllSearchHistory',
+	setPlayHistory: 'setPlayHistory',
+	setFavoriteList: 'setFavoriteList'
 }
 
 export default {
@@ -21,5 +23,11 @@ export default {
 	},
 	[MUTATION_TYPES.removeAllSearchHistory](state) {
 		state.searchHistory = []
+	},
+	[MUTATION_TYPES.setPlayHistory](state, payload) {
+		state.playHistory = payload
+	},
+	[MUTATION_TYPES.setFavoriteList](state, payload) {
+		state.favoriteList = payload
 	}
 }

@@ -5,31 +5,28 @@
     </div>
 
     <div ref="shortcutWrapper" class="shortcut-wrapper" v-show="!query">
-
-      <div class="shortcut">
-        <div class="hot-key">
-          <h1 class="title">热门搜索</h1>
-          <ul>
-            <li @click="setQuery(item.k)" class="item" v-for="item in hotKey">
-              <span>{{item.k}}</span>
-            </li>
-          </ul>
+      <app-scroll class="shortcut">
+        <div>
+          <div class="hot-key">
+            <h1 class="title">热门搜索</h1>
+            <ul>
+              <li @click="setQuery(item.k)" class="item" v-for="item in hotKey">
+                <span>{{item.k}}</span>
+              </li>
+            </ul>
+          </div>
+          <div class="search-history" v-show="searchHistory.length">
+            <h1 class="title">
+              <span class="text">搜索历史</span>
+              <span class="clear" @click="showConfirm">
+                <i class="icon-clear"></i>
+              </span>
+            </h1>
+            <app-search-list :searches="searchHistory" @delete="deleteHistory" @select="setQuery"></app-search-list>
+          </div>
         </div>
-
-        <div class="search-history" v-show="searchHistory.length">
-          <h1 class="title">
-            <span class="text">搜索历史</span>
-            <span class="clear" @click="showConfirm">
-              <i class="icon-clear"></i>
-            </span>
-          </h1>
-          <app-search-list :searches="searchHistory" @delete="deleteHistory"></app-search-list>
-        </div>
-
-      </div>
-
+      </app-scroll>
     </div>
-
     <div class="search-result" v-show="query" ref="searchResult">
       <app-suggest ref="suggest" :query="query"></app-suggest>
     </div>
@@ -45,25 +42,16 @@ import AppConfirm from '@/base/Confirm/Confirm'
 import AppScroll from '@/base/Scroll/Scroll'
 import { getHotKey } from '@/api/search'
 import { CODE_OK } from '@/api/config'
-import { GETTER_TYPES as COMMON_GETTER_TYPES } from '@/store/common/getters'
-import { ACTION_TYPES as COMMON_ACTION_TYPES } from '@/store/common/actions'
-import { mapGetters, mapActions } from 'vuex'
-import { playlistMixin } from 'common/js/mixin'
-
+import { mapActions } from 'vuex'
+import PlaylistMixin from '@/mixins/PlaylistMixin'
+import SearchMixin from '@/mixins/SearchMixin'
 
 export default {
-  mixins: [playlistMixin],
+  mixins: [PlaylistMixin, SearchMixin],
   data() {
     return {
       hotKey: [],
       query: '',
-    }
-  },
-  computed: {
-    ...mapGetters({ ...COMMON_GETTER_TYPES }),
-    computedSearchHistory() {
-      console.log('this.searchHistory', this.searchHistory)
-      return this.searchHistory
     }
   },
   components: {
@@ -77,43 +65,15 @@ export default {
     this._getHotKey()
   },
   methods: {
-    ...mapActions({ ...COMMON_ACTION_TYPES }),
+    ...mapActions(['removeAllSearchHistory']),
     handlePlaylist(playlist) {
       const bottom = playlist.length > 0 ? '60px' : ''
 
       this.$refs.searchResult.style.bottom = bottom
-
       this.$refs.shortcutWrapper.style.bottom = bottom
-    },
-    showConfirm() {
-      this.$refs.confirm.show()
-    },
-    deleteHistory(history) {
-      let searchHistory = this.searchHistory.slice()
-      let index = searchHistory.findIndex(item => item === history)
-      searchHistory.splice(index, 1)
-
-      this.setSearchHistory(searchHistory)
     },
     clearSearchHistory() {
       this.removeAllSearchHistory()
-    },
-    onQueryChange(query) {
-      this.query = query
-
-      if (query) {
-        this.addToSearchHistory(query)
-      }
-    },
-    addToSearchHistory(query) {
-      let searchHistory = this.searchHistory.slice()
-      searchHistory.push(query)
-      this.setSearchHistory(searchHistory)
-    },
-    setQuery(query) {
-      this.$refs.searchBox.setQuery(query)
-      this.query = query
-      this.addToSearchHistory(query)
     },
     _getHotKey() {
       getHotKey().then((res) => {

@@ -12,14 +12,14 @@
 </template>
 
 <script type="text/ecmascript-6">
+
 export default {
   props: {
     searches: {
       type: Array,
-      default: []
+      default: () => []
     }
   },
-
   methods: {
     selectItem(item) {
       this.$emit('select', item)

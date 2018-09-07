@@ -28,7 +28,6 @@ const TYPE_SINGER = 'singer'
 const PERPAGE = 20
 
 export default {
-  name: 'suggest',
   components: {
     AppScroll,
     AppLoading
@@ -56,12 +55,11 @@ export default {
   },
   methods: {
     ...mapActions({ ...PLAYER_ACTION_TYPES }),
-
     play(item) {
-      this.selectPlay({
-        list: [item],
-        index: 0
-      })
+      this.addToPlaylist(item)
+      this.setCurrentIndex(0)
+      this.setFullScreen(true)
+      this.$emit('select', item)
     },
     searchMore() {
       // console.log('searchMore...')
@@ -87,8 +85,6 @@ export default {
         // }
 
         // use sample song list
-
-
         this.result = this.sampleList.slice(0, 20)
       })
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="search-box">
-    <i class="icon-search"></i>
-    <input v-model="query" @keyup.enter="search" class="box" />
+    <i class="icon-search" @click="search"></i>
+    <input v-model="query" @keyup.enter="search" class="box" :placeholder="placeholder" />
     <i v-show="query" @click="clear" class="icon-dismiss"></i>
   </div>
 </template>

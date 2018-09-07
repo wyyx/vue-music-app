@@ -11,14 +11,14 @@
             </span>
           </h1>
         </div>
-        <app-scroll ref="listContent" :data="playlist" class="list-content">
+        <app-scroll ref="listContent" :data="sequenceList" class="list-content">
           <transition-group ref="list" name="list" tag="ul">
-            <li :key="item.id" class="item" v-for="(item,index) in playlist" @click="selectItem(item,index)">
+            <li :key="item.id" class="item" v-for="(item,index) in sequenceList" @click="selectItem(item)">
               <i class="current" :class="getCurrentIcon(item)"></i>
               <span class="text">{{item.name}}</span>
-              <span class="like">
-                <i class="icon-favorite"></i>
-              </span>
+              <!-- <span class="like">
+                <app-favorite :size="10" :song="item"></app-favorite>
+              </span> -->
               <span class="delete" @click.stop="deleteSong(item)">
                 <i class="icon-delete"></i>
               </span>
@@ -47,12 +47,12 @@ import AppScroll from 'base/Scroll/Scroll'
 import AppConfirm from 'base/Confirm/Confirm'
 import AppPlayMode from '@/base/PlayMode/PlayMode'
 import AppAddSong from '@/components/AddSong/AddSong'
+import AppFavorite from 'base/Favorite/Favorite'
 import { GETTER_TYPES as PLAYER_GETTER_TYPES } from '@/store/player/getters'
 import { ACTION_TYPES as PLAYER_ACTION_TYPES } from '@/store/player/actions'
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
-  name: 'playlist',
   data() {
     return {
       showFlag: false,
@@ -64,11 +64,12 @@ export default {
       return this.playMode === playMode.sequence ? '顺序播放' : this.playMode === playMode.random ? '随机播放' : '单曲循环'
     }
   },
-  created() {
-  },
   methods: {
-
     ...mapActions({ ...PLAYER_ACTION_TYPES }),
+    toggleFavorite() {
+      console.log('aaa', )
+      this.$refs.favorite.toggleFavorite()
+    },
     addSong() {
       this.$refs.addSong.show()
     },
@@ -90,7 +91,8 @@ export default {
       }
       return ''
     },
-    selectItem(item, index) {
+    selectItem(item) {
+      let index = this.playlist.findIndex(s => s.id === item.id)
       this.setCurrentIndex(index)
       this.setPlayingState(true)
     },
@@ -117,7 +119,8 @@ export default {
     AppConfirm,
     AppScroll,
     AppPlayMode,
-    AppAddSong
+    AppAddSong,
+    AppFavorite
   }
 }
 </script>

@@ -7,6 +7,7 @@ import AppSinger from 'components/Singer/Singer'
 import AppSingerDetail from 'components/SingerDetail/SingerDetail'
 import AppDisc from 'components/Disc/Disc'
 import AppTopList from 'components/TopList/TopList'
+import AppUserCenter from 'components/UserCenter/UserCenter'
 
 Vue.use(Router)
 
@@ -49,6 +50,10 @@ export default new Router({
 					component: AppSingerDetail
 				}
 			]
+		},
+		{
+			path: '/user',
+			component: AppUserCenter
 		}
 	]
 })
