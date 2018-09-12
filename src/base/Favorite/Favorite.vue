@@ -12,6 +12,10 @@ export default {
       type: Number,
       default: 30
     },
+    color: {
+      type: String,
+      default: '#d93f30'
+    },
     song: {}
   },
   computed: {
@@ -28,7 +32,6 @@ export default {
   methods: {
     ...mapActions(['addFavorite', 'removeFavorite']),
     toggleFavorite() {
-      console.log('xxx', )
       if (this.isFavorite) {
         this.removeFavorite(this.song)
       } else {
@@ -42,6 +45,9 @@ export default {
       return 'icon-not-favorite'
     },
     getStyle() {
+      if (this.isFavorite) {
+        return `font-size: ${this.size}px; color: ${this.color}`
+      }
       return `font-size: ${this.size}px;`
     }
   }

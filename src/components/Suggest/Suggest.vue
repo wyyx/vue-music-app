@@ -56,17 +56,12 @@ export default {
   methods: {
     ...mapActions({ ...PLAYER_ACTION_TYPES }),
     play(item) {
-      this.addToPlaylist(item)
-      this.setCurrentIndex(0)
+      this.selectOnePlay(item)
       this.setFullScreen(true)
       this.$emit('select', item)
     },
     searchMore() {
-      // console.log('searchMore...')
-      // console.log('this.page', this.page)
       this.page++
-
-      let totalSize = this.sampleList.length
       let totalPage = 3
 
       if (this.page < totalPage) {
@@ -74,6 +69,7 @@ export default {
       } else {
         this.hasMore = false
         this.result = this.sampleList.slice()
+        this.$refs.list.refresh()
       }
     },
     _search() {

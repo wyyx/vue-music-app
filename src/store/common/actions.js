@@ -108,7 +108,7 @@ export default {
 
 		for (let i = 0; i < favoriteList.length; i++) {
 			if (favoriteList[i].id === song.id) {
-				console.log('song', song)
+				// console.log('song', song)
 				favoriteList.splice(i, 1)
 				favoriteListCache.remove(song)
 			}

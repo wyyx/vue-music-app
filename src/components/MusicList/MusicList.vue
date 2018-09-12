@@ -104,6 +104,7 @@ export default {
       let showHeight = this.imageHeight + this.scrollY
       let zIndex = 0
 
+      // exceed title
       if (showHeight < RESERVED_HEIGHT) {
         this.$refs.bgImage.style.paddingTop = 0
         this.$refs.bgImage.style.height = `${RESERVED_HEIGHT}px`
@@ -114,6 +115,7 @@ export default {
         this.$refs.playBtn.style.display = ''
       }
 
+      // image to title
       if (showHeight > RESERVED_HEIGHT && showHeight < this.imageHeight) {
         this.$refs.layer.style['transform'] = `translate3d(0,${this.scrollY}px,0)`
 
@@ -122,10 +124,19 @@ export default {
         zIndex = 0
       }
 
+      // bottom of image
       if (showHeight > this.imageHeight) {
         let scale = (showHeight) / this.imageHeight
         this.$refs.bgImage.style['transform'] = `scale(${scale})`
         zIndex = 10
+
+      }
+
+      // hide layer
+      if (showHeight >= this.imageHeight) {
+        this.$refs.layer.style.display = 'none'
+      } else {
+        this.$refs.layer.style.display = ''
       }
 
       this.$refs.bgImage.style.zIndex = zIndex
