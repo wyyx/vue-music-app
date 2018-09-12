@@ -88,7 +88,6 @@ export default {
     _getDiscList() {
       getDiscList().then((res) => {
         if (res.code === CODE_OK) {
-          // console.log('res', res)
           this.discList = res.data.list
         }
       })
