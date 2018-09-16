@@ -54,6 +54,10 @@ export default new Router({
 		{
 			path: '/user',
 			component: AppUserCenter
+		},
+		{
+			path: '*',
+			redirect: '/'
 		}
 	]
 })
