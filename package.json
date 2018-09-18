@@ -5,11 +5,13 @@
 	"author": "Wyyx <gnehcyx@163.com>",
 	"private": true,
 	"scripts": {
-		"client": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-		"start": "npm run dev",
+		"start": "yarn install && yarn run build && yarn run install-server",
+		"server-webpack": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
 		"build": "node build/build.js",
-		"server": "npm run dev --prefix server",
-		"dev": "concurrently \"npm run server\" \"npm run client\""
+		"clean": "rm -rf node_modules",
+		"install-server": "cd ./server-prod && yarn install",
+		"server-dev": "npm run dev --prefix server-dev",
+		"dev": "concurrently \"npm run server-dev\" \"npm run server-webpack\""
 	},
 	"dependencies": {
 		"axios": "^0.18.0",
@@ -71,9 +73,5 @@
 		"node": ">= 6.0.0",
 		"npm": ">= 3.0.0"
 	},
-	"browserslist": [
-		"> 1%",
-		"last 2 versions",
-		"not ie <= 8"
-	]
+	"browserslist": [ "> 1%", "last 2 versions", "not ie <= 8" ]
 }
