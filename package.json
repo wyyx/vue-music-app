@@ -9,7 +9,7 @@
 		"server-webpack": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
 		"build": "node build/build.js",
 		"clean": "rm -rf node_modules",
-		"install-server": "cd ./server && yarn install",
+		"install-server": "cd ./server && yarn install && cd ..",
 		"server": "npm start --prefix server",
 		"dev": "concurrently \"npm run server\" \"npm run server-webpack\""
 	},
