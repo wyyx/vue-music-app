@@ -9,9 +9,9 @@
 		"server-webpack": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
 		"build": "node build/build.js",
 		"clean": "rm -rf node_modules",
-		"install-server": "cd ./server-prod && yarn install",
-		"server-dev": "npm run dev --prefix server-dev",
-		"dev": "concurrently \"npm run server-dev\" \"npm run server-webpack\""
+		"install-server": "cd ./server && yarn install",
+		"server": "npm start --prefix server",
+		"dev": "concurrently \"npm run server\" \"npm run server-webpack\""
 	},
 	"dependencies": {
 		"axios": "^0.18.0",
