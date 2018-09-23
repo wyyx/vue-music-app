@@ -59,6 +59,10 @@ export default {
     _getTopList() {
       getTopList().then((res) => {
         if (res.code === CODE_OK) {
+          res.data.topList.map(e => {
+            e.picUrl = 'https' + e.picUrl.substring(4)
+          })
+
           this.topList = res.data.topList
           // console.log('topList', this.topList)
         }
