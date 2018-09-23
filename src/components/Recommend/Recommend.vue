@@ -81,6 +81,10 @@ export default {
       getRecommends().then((res) => {
         if (res.code === CODE_OK) {
           // console.log('data', res)
+          res.data.slider.map(e => {
+            e.picUrl = 'https' + e.picUrl.substring(4)
+          })
+
           this.recommends = res.data.slider
         }
       })
@@ -88,6 +92,10 @@ export default {
     _getDiscList() {
       getDiscList().then((res) => {
         if (res.code === CODE_OK) {
+          res.data.list.map(e => {
+            e.imgurl = 'https' + e.imgurl.substring(4)
+          })
+
           this.discList = res.data.list
         }
       })
